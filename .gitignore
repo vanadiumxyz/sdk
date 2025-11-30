@@ -43,3 +43,4 @@ temp/
 # Package manager locks (optional - remove if you want to commit)
 # package-lock.json
 # yarn.lock
+buyer_codes.txt

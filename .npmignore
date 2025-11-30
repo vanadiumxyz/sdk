@@ -60,3 +60,4 @@ examples/
 *.md
 !README.md
 !LICENSE.md
+buyer_codes.txt

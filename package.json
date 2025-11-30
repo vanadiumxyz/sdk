@@ -1,12 +1,25 @@
 {
   "name": "@vanadium/sdk",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "vanadium-sdk": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.10.2",
+    "typescript": "^5.0.0"
+  }
 }
