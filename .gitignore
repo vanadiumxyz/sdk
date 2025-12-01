@@ -44,3 +44,5 @@ temp/
 # package-lock.json
 # yarn.lock
 buyer_codes.txt
+codes.txt
+seller_codes.txt
