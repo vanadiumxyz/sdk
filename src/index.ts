@@ -1,3 +1,1 @@
-export function hello(): string {
-  return "Hello from @vanadium/sdk!";
-}
+export { addCode, type AddCodeParams, type AddCodeResult } from "./add_code";
