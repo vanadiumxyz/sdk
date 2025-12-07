@@ -2,6 +2,8 @@
 
 import { addCode } from "./add_code";
 import type { Address } from "viem";
+import fs from "fs";
+import path from "path";
 
 interface AddCodeArgs {
   privateKey?: string;
@@ -94,11 +96,17 @@ async function main(): Promise<void> {
       });
 
       console.log("\n========================================");
-      console.log("INVITE CODES (share these with friends):");
+      console.log("INVITE CODES (share these with people you want to join your gateway):");
       console.log("========================================");
+
       result.codes.forEach((code, i) => {
         console.log(`${i + 1}. ${code}`);
       });
+
+      const filePath = path.join(process.cwd(), "buyer_codes.txt");
+      fs.appendFileSync(filePath, "\n" + result.codes.join("\n") + "\n");
+      console.log(`\nCodes appended to ${filePath}`);
+      console.log(`Total ETH spent: ${result.ethSpent} (${result.ethSpentUsd})`);
       console.log("========================================\n");
     } catch (err) {
       console.error("Error:", err instanceof Error ? err.message : err);

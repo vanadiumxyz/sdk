@@ -1,6 +1,6 @@
 {
   "name": "@vanadium/sdk",
-  "version": "0.0.1",
+  "version": "0.1.3",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

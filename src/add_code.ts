@@ -4,6 +4,7 @@ import {
   http,
   keccak256,
   encodePacked,
+  formatEther,
   type Hex,
   type Address,
 } from "viem";
@@ -30,6 +31,8 @@ export interface AddCodeParams {
 export interface AddCodeResult {
   codes: Hex[];
   transactionHash: Hex;
+  ethSpent: string;
+  ethSpentUsd: string;
 }
 
 export async function addCode(params: AddCodeParams): Promise<AddCodeResult> {
@@ -63,11 +66,6 @@ export async function addCode(params: AddCodeParams): Promise<AddCodeResult> {
 
   const chainId = await publicClient.getChainId();
 
-  console.log(`Adding ${count} code(s) to contract...`);
-  console.log("Chain ID:", chainId);
-  console.log("Contract:", contractAddress);
-  console.log("From:", account.address);
-
   const hash = await walletClient.writeContract({
     address: contractAddress,
     abi: ABI,
@@ -81,14 +79,25 @@ export async function addCode(params: AddCodeParams): Promise<AddCodeResult> {
     },
   });
 
-  console.log("Transaction hash:", hash);
-  console.log("Waiting for confirmation...");
-
   const receipt = await publicClient.waitForTransactionReceipt({ hash });
 
   if (receipt.status !== "success") {
     throw new Error("Transaction failed!");
   }
 
-  return { codes, transactionHash: hash };
+  const ethSpent = formatEther(receipt.gasUsed * receipt.effectiveGasPrice);
+
+  // Fetch ETH price from CoinGecko
+  let ethSpentUsd = "N/A";
+  try {
+    const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd");
+    const data = await res.json() as { ethereum: { usd: number } };
+    const ethPrice = data.ethereum.usd;
+    const usdValue = parseFloat(ethSpent) * ethPrice;
+    ethSpentUsd = `$${usdValue.toFixed(2)}`;
+  } catch {
+    // Price fetch failed, leave as N/A
+  }
+
+  return { codes, transactionHash: hash, ethSpent, ethSpentUsd };
 }
