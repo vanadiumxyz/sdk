@@ -1,88 +1,39 @@
 # Vanadium SDK
 
-A TypeScript SDK for managing invite codes on EVM-compatible blockchains.
+Invite code management for EVM chains. Generates random 32-byte codes, hashes via `keccak256(abi.encodePacked(code))`, and submits to contract.
 
-## Installation
+## Install
 
 ```bash
-npm install @vanadium/sdk
+npm i @vanadium/sdk
 ```
 
-## Usage
-
-### As a Library
+## Library
 
 ```typescript
 import { addCode } from "@vanadium/sdk";
 
-const result = await addCode({
+const { codes, transactionHash } = await addCode({
   privateKey: "0x...",
-  rpcUrl: "https://rpc.example.com",
+  rpcUrl: "https://rpc.sepolia.org",
   contractAddress: "0x...",
-  count: 5, // optional, defaults to 1
+  count: 5,
 });
-
-console.log(result.codes);           // Array of generated invite codes
-console.log(result.transactionHash); // Transaction hash
 ```
 
-### As a CLI
+## CLI
 
 ```bash
-npx @vanadium/sdk add-code \
-  -p <private-key> \
-  -r <rpc-url> \
-  -c <contract-address> \
-  -n <number-of-codes>
+npx @vanadium/sdk add-code -p <key> -r <rpc> -c <addr> [-n <count>]
 ```
 
-#### Options
+Codes output to stdout and appended to `buyer_codes.txt`.
 
-| Flag | Long | Description | Required |
-|------|------|-------------|----------|
-| `-p` | `--private-key` | Private key for signing transactions | Yes |
-| `-r` | `--rpc-url` | RPC endpoint URL | Yes |
-| `-c` | `--contract-addr` | Contract address | Yes |
-| `-n` | `--number` | Number of codes to generate | No (default: 1) |
+## Args
 
-#### Example
-
-```bash
-npx @vanadium/sdk add-code \
-  -p 0xabc123... \
-  -r https://rpc.sepolia.org \
-  -c 0xdef456... \
-  -n 10
-```
-
-Generated codes are printed to the console and appended to `buyer_codes.txt` in the current directory.
-
-## API
-
-### `addCode(params: AddCodeParams): Promise<AddCodeResult>`
-
-Generates invite codes, hashes them, and submits them to the contract.
-
-#### Parameters
-
-```typescript
-interface AddCodeParams {
-  privateKey: string;      // Wallet private key
-  rpcUrl: string;          // RPC endpoint URL
-  contractAddress: Address; // Contract address
-  count?: number;          // Number of codes (default: 1)
-}
-```
-
-#### Returns
-
-```typescript
-interface AddCodeResult {
-  codes: Hex[];            // Generated invite codes
-  transactionHash: Hex;    // Transaction hash
-}
-```
-
-## License
-
-ISC
+| Arg | CLI | Description |
+|-----|-----|-------------|
+| `privateKey` | `-p, --private-key` | Signing key (with or without `0x` prefix) |
+| `rpcUrl` | `-r, --rpc-url` | JSON-RPC endpoint |
+| `contractAddress` | `-c, --contract-addr` | Your gateway contract address |
+| `count` | `-n, --number` | Number of codes to generate (default: 1) |
