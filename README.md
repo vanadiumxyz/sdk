@@ -1,17 +1,20 @@
 # Vanadium SDK
 
-Invite code management for EVM chains. Generates random 32-byte codes, hashes via `keccak256(abi.encodePacked(code))`, and submits to contract.
+And SDK for interaction with Vanadium smart contracts.
+
+The target audience is developers using the vanadium network and technical deployers of Vanadium Gateways.
 
 ## Install
 
 ```bash
-npm i @vanadium/sdk
+npm i @vanadiumxyz/sdk
 ```
 
-## Library
+## Usage
 
+### Create invite codes for a Gateway
 ```typescript
-import { addCode } from "@vanadium/sdk";
+import { addCode } from "@vanadiumxyz/sdk";
 
 const { codes, transactionHash } = await addCode({
   privateKey: "0x...",
@@ -21,19 +24,16 @@ const { codes, transactionHash } = await addCode({
 });
 ```
 
-## CLI
+Or with the cli:
 
 ```bash
-npx @vanadium/sdk add-code -p <key> -r <rpc> -c <addr> [-n <count>]
+npx @vanadiumxyz/sdk add-code -p <key> -r <rpc> -c <addr> [-n <count>]
 ```
-
-Codes output to stdout and appended to `buyer_codes.txt`.
-
-## Args
-
 | Arg | CLI | Description |
 |-----|-----|-------------|
 | `privateKey` | `-p, --private-key` | Signing key (with or without `0x` prefix) |
 | `rpcUrl` | `-r, --rpc-url` | JSON-RPC endpoint |
 | `contractAddress` | `-c, --contract-addr` | Your gateway contract address |
 | `count` | `-n, --number` | Number of codes to generate (default: 1) |
+> Codes output to stdout and appended to `buyer_codes.txt`.
+ 
