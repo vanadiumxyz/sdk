@@ -2,6 +2,9 @@
   "name": "@vanadium/sdk",
   "version": "0.2.2",
   "description": "",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
